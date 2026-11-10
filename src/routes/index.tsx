@@ -5,13 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
 import { search } from "@/lib/search";
+import logo from "@/assets/ketxup-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Achei! — Catálogo de objetos da gincana" },
+      { title: "Catch up — Catálogo da equipe KET XUP" },
       { name: "description", content: "Pesquise por voz e descubra em segundos em qual barraca está cada objeto da gincana." },
-      { property: "og:title", content: "Achei! — Catálogo de objetos da gincana" },
+      { property: "og:title", content: "Catch up — Catálogo da equipe KET XUP" },
       { property: "og:description", content: "Busca por voz para achar objetos em segundos entre as barracas." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -26,9 +27,13 @@ function Index() {
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-5">
       <header className="mb-5 flex items-center justify-between">
-        <h1 className="font-display text-3xl tracking-tight">
-          Achei<span className="text-primary">!</span>
-        </h1>
+        <div className="flex items-center gap-3">
+          <img src={logo.url} alt="KET XUP" className="h-14 w-14 rounded-full" />
+          <div>
+            <h1 className="font-display text-3xl leading-none tracking-tight text-primary">Catch up</h1>
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Equipe KET XUP</p>
+          </div>
+        </div>
         <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
       </header>
       <div className="mb-5 grid grid-cols-2 gap-1 rounded-xl bg-card p-1">
