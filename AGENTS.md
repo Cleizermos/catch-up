@@ -28,3 +28,4 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+- Search runs client-side over all items loaded once and kept live via realtime: instant results with no network per query.
