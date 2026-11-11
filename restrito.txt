@@ -1,9 +1,0 @@
-APP KET XUP
-
-senha do supabase - PBXuviNLrPt3cwzq
-
-VITE_SUPABASE_URL=https://ayxdpvwdlolowgxxuvhf.supabase.co
-VITE_SUPABASE_ANON_KEY= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5eGRwdndkbG9sb3dneHh1dmhmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQzMzQ0MjcsImV4cCI6MjEwOTkxMDQyN30.GPq-h9CdSZSCzzZxXcaQcnIX_HTBpbDp1RCrz0hcq1g
-DATABASE_URL=postgresql://postgres:PBXuviNLrPt3cwzq@db.ayxdpvwdlolowgxxuvhf.supabase.co:5432/postgres
-
- postgresql://postgres.ayxdpvwdlolowgxxuvhf:PBXuviNLrPt3cwzq@aws-1-us-east-2.pooler.supabase.com:5432/postgres
