@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
 import { search } from "@/lib/search";
-import logo from "@/assets/ketxup-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,7 +27,7 @@ function Index() {
     <main className="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-5">
       <header className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src={logo.url} alt="KET XUP" className="h-14 w-14 rounded-full" />
+          <img src="/logo.png" alt="Catch up KET XUP" className="h-12 w-auto" />
           <div>
             <h1 className="font-display text-3xl leading-none tracking-tight text-primary">Catch up</h1>
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Equipe KET XUP</p>
