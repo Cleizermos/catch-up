@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
 import { search } from "@/lib/search";
+import { AccessGate } from "@/components/AccessGate";
+import { AccessAdmin } from "@/components/AccessAdmin";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,7 +23,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [mode, setMode] = useState<"buscar" | "cadastrar">("buscar");
+  return <AccessGate>{({ isAdmin, email }) => <App isAdmin={isAdmin} email={email} />}</AccessGate>;
+}
+
+function App({ isAdmin, email }: { isAdmin: boolean; email: string }) {
+  const [mode, setMode] = useState<"buscar" | "cadastrar" | "acesso">("buscar");
   const { items, loading } = useItems();
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-5">
@@ -33,10 +39,13 @@ function Index() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Equipe KET XUP</p>
           </div>
         </div>
-        <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
+        <span className="flex flex-col items-end text-sm text-muted-foreground">
+          {loading ? "carregando…" : `${items.length} objetos`}
+          <button onClick={() => supabase.auth.signOut()} className="text-xs underline">sair</button>
+        </span>
       </header>
-      <div className="mb-5 grid grid-cols-2 gap-1 rounded-xl bg-card p-1">
-        {(["buscar", "cadastrar"] as const).map((m) => (
+      <div className={`mb-5 grid ${isAdmin ? "grid-cols-3" : "grid-cols-2"} gap-1 rounded-xl bg-card p-1`}>
+        {(isAdmin ? (["buscar", "cadastrar", "acesso"] as const) : (["buscar", "cadastrar"] as const)).map((m) => (
           <button
             key={m}
             onClick={() => setMode(m)}
@@ -46,7 +55,7 @@ function Index() {
           </button>
         ))}
       </div>
-      {mode === "buscar" ? <SearchView items={items} /> : <AddView items={items} />}
+      {mode === "buscar" ? <SearchView items={items} /> : mode === "cadastrar" ? <AddView items={items} /> : <AccessAdmin me={email} />}
     </main>
   );
 }
