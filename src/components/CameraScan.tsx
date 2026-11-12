@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { COCO_PT, boxColor } from "@/lib/vision";
 
 type Found = { key: number; name: string; keywords: string; on: boolean };
-type Model = { detect: (el: HTMLCanvasElement) => Promise<{ class: string; score: number; bbox: number[] }[]> };
+type Model = { detect: (el: HTMLCanvasElement) => Promise<{ class: string; score: number; bbox: [number, number, number, number] }[]> };
 
 export function CameraScan({ tent, spot, onClose }: { tent: string; spot: string; onClose: () => void }) {
   const video = useRef<HTMLVideoElement>(null);

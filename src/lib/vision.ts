@@ -37,11 +37,11 @@ export function colorName(r: number, g: number, b: number): string {
 }
 
 /** Average color of the central part of a box on a canvas. */
-export function boxColor(ctx: CanvasRenderingContext2D, [x, y, w, h]: number[]): string {
+export function boxColor(ctx: CanvasRenderingContext2D, [x, y, w, h]: [number, number, number, number]): string {
   const cx = Math.round(x + w * 0.3), cy = Math.round(y + h * 0.3);
   const cw = Math.max(1, Math.round(w * 0.4)), ch = Math.max(1, Math.round(h * 0.4));
   const px = ctx.getImageData(cx, cy, cw, ch).data;
   let r = 0, g = 0, b = 0, n = 0;
-  for (let i = 0; i < px.length; i += 16) { r += px[i]; g += px[i + 1]; b += px[i + 2]; n++; }
+  for (let i = 0; i < px.length; i += 16) { r += px[i]!; g += px[i + 1]!; b += px[i + 2]!; n++; }
   return colorName(r / n, g / n, b / n);
 }
