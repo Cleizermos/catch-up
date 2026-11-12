@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Camera, Mic, Plus, Search, Trash2, X } from "lucide-react";
+import { Camera, CircleHelp, Mic, Plus, Search, Trash2, X } from "lucide-react";
 import { CameraScan } from "@/components/CameraScan";
+import { ONBOARDING_KEY, Onboarding } from "@/components/Onboarding";
 import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
@@ -24,6 +25,10 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [mode, setMode] = useState<"buscar" | "cadastrar">("buscar");
   const { items, loading } = useItems();
+  const [help, setHelp] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem(ONBOARDING_KEY) !== "true") setHelp(true);
+  }, []);
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col px-4 pb-10 pt-5">
       <header className="mb-5 flex items-center justify-between">
@@ -34,7 +39,10 @@ function Index() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Equipe KET XUP</p>
           </div>
         </div>
-        <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
+          <button onClick={() => setHelp(true)} aria-label="Ajuda / Primeiros passos" className="p-1 text-primary"><CircleHelp className="h-6 w-6" /></button>
+        </div>
       </header>
       <div className="mb-5 grid grid-cols-2 gap-1 rounded-xl bg-card p-1">
         {(["buscar", "cadastrar"] as const).map((m) => (
@@ -47,6 +55,7 @@ function Index() {
           </button>
         ))}
       </div>
+      {help && <Onboarding onDone={() => setHelp(false)} />}
       {mode === "buscar" ? <SearchView items={items} /> : <AddView items={items} />}
     </main>
   );
