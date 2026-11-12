@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Camera, Mic, Plus, Search, Trash2, X } from "lucide-react";
-import { CameraScan } from "@/components/CameraScan";
+import { Mic, Plus, Search, Trash2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
@@ -128,7 +127,6 @@ function AddView({ items }: { items: ReturnType<typeof useItems>["items"] }) {
   const [spot, setSpot] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [cam, setCam] = useState(false);
   const nameRef = useRef<HTMLInputElement>(null);
   const voice = useVoice((t) => setName(t));
 
@@ -159,13 +157,6 @@ function AddView({ items }: { items: ReturnType<typeof useItems>["items"] }) {
 
   return (
     <section className="flex flex-col gap-6">
-      {cam ? (
-        <CameraScan tent={tent} spot={spot} onClose={() => setCam(false)} />
-      ) : (
-        <button type="button" onClick={() => setCam(true)} className="flex h-12 items-center justify-center gap-2 rounded-xl border-2 border-primary font-semibold text-primary">
-          <Camera className="h-5 w-5" /> Cadastrar pela câmera
-        </button>
-      )}
       <form onSubmit={save} className="flex flex-col gap-3">
         <div className="grid grid-cols-2 gap-3">
           <label className="text-sm text-muted-foreground">
