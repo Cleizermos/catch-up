@@ -1,17 +1,19 @@
-# Login e liberação de acesso para a equipe
+# Entrada só com e-mail liberado
 
 ## Situação atual
-O banco já está protegido: só e-mails liberados conseguem ver e cadastrar os 12 objetos salvos. Porém o app ainda não tem tela de login, então hoje ninguém consegue ver os objetos. Já existem 2 e-mails liberados e nenhum usuário cadastrado.
+O banco já está protegido: só e-mails liberados veem e cadastram os 12 objetos salvos. Mas o app não tem tela de entrada, então hoje ninguém vê os objetos. Já existem 2 e-mails liberados.
 
-## O que vou construir
-1. **Tela de entrada (/auth)** com as cores KET XUP: entrar e criar conta com e-mail e senha, e botão "Entrar com Google". Só e-mails liberados conseguem criar conta; os outros veem a mensagem "Seu e-mail ainda não foi liberado".
-2. **App protegido**: Buscar e Cadastrar ficam disponíveis só para quem entrou, mostrando os objetos já salvos em tempo real como antes. Botão "Sair" no topo.
-3. **Painel "Equipe" (só para administrador)**: lista os e-mails liberados, campo para adicionar um e-mail e botão para remover. O primeiro usuário a criar conta vira administrador automaticamente.
-4. **Esqueci a senha**: link na tela de entrada e página para definir a nova senha.
+## Como vai funcionar
+1. **Tela de entrada**, nas cores KET XUP, com um único campo: e-mail.
+   - E-mail **não liberado** → mensagem "Seu e-mail não tem acesso. Fale com o administrador." e não entra.
+   - E-mail **liberado** → recebe no e-mail um link para entrar (sem senha). Clicou, entrou. O celular fica conectado, não precisa repetir em toda gincana.
+   - O link no e-mail impede que alguém entre só sabendo o e-mail de um colega.
+2. **App protegido**: Buscar e Cadastrar só para quem entrou, com os objetos já salvos aparecendo em tempo real. Botão "Sair" no topo.
+3. **Painel "Equipe" (só administrador)**: lista os e-mails liberados, campo para adicionar e botão para remover. O primeiro a entrar vira administrador.
 
 ## Detalhes técnicos
-- Ativar login por e-mail e Google; manter confirmação de e-mail ligada.
-- Rotas: `/auth`, `/reset-password` (públicas); `/_authenticated/app` (Buscar/Cadastrar) e `/_authenticated/equipe` (admin). `/` vira página inicial que redireciona para `/app` ou `/auth`.
-- Conferir que os gatilhos existentes (`check_allowed_signup`, `assign_owner_admin`) estão ligados em `auth.users`; criar se faltarem.
-- `useItems` só carrega após login; listener único de sessão no root.
-- Painel usa `allowed_emails` direto (RLS de admin já existe); verificação de admin via `user_roles`.
+- Ativar login por e-mail (link mágico, `signInWithOtp` com `shouldCreateUser: true`); sem senha, sem Google.
+- Checagem prévia: função `is_email_allowed(email)` (security definer, só retorna true/false) chamada antes de enviar o link; o gatilho `check_allowed_signup` em `auth.users` continua bloqueando no servidor. Conferir/criar gatilhos `check_allowed_signup` e `assign_owner_admin`.
+- Rotas: `/auth` (pública), `/_authenticated/app` e `/_authenticated/equipe`; `/` redireciona.
+- `useItems` só carrega após login; um único listener de sessão no root.
+- Painel usa `allowed_emails` (RLS de admin já existe); admin verificado via `user_roles`.
