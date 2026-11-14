@@ -29,3 +29,4 @@ use the editor.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
 - Search runs client-side over all items loaded once and kept live via realtime: instant results with no network per query.
+- Access: sign-in is email magic link; only emails in allowed_emails can sign in (DB trigger + is_email_allowed precheck); admins manage the list at /equipe.

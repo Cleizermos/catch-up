@@ -1,6 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Mic, Plus, Search, Trash2, X } from "lucide-react";
+import { LogOut, Mic, Plus, Search, Trash2, Users, X } from "lucide-react";
+import { Login } from "@/components/login";
+import { useIsAdmin, useSession } from "@/hooks/use-session";
 import { supabase } from "@/integrations/supabase/client";
 import { useItems } from "@/hooks/use-items";
 import { useVoice } from "@/hooks/use-voice";
@@ -21,6 +23,14 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { session, ready } = useSession();
+  if (!ready) return null;
+  if (!session) return <Login />;
+  return <App userId={session.user.id} />;
+}
+
+function App({ userId }: { userId: string }) {
+  const admin = useIsAdmin(userId);
   const [mode, setMode] = useState<"buscar" | "cadastrar">("buscar");
   const { items, loading } = useItems();
   return (
@@ -33,7 +43,13 @@ function Index() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Equipe KET XUP</p>
           </div>
         </div>
-        <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
+        <div className="flex flex-col items-end gap-1">
+          <span className="text-sm text-muted-foreground">{loading ? "carregando…" : `${items.length} objetos`}</span>
+          <div className="flex gap-3 text-muted-foreground">
+            {admin && <Link to="/equipe" aria-label="Equipe"><Users className="h-5 w-5" /></Link>}
+            <button aria-label="Sair" onClick={() => supabase.auth.signOut()}><LogOut className="h-5 w-5" /></button>
+          </div>
+        </div>
       </header>
       <div className="mb-5 grid grid-cols-2 gap-1 rounded-xl bg-card p-1">
         {(["buscar", "cadastrar"] as const).map((m) => (
